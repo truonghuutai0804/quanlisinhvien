@@ -20,8 +20,8 @@ class FacultyController {
         try {
             const maKhoa = req.body.MA_KHOA
             const tenKhoa = req.body.TEN_KHOA
-            await sequelize.query(`INSERT INTO faculties (MA_KHOA, TEN_KHOA)`+
-                                        ` VALUES ('${maKhoa}', '${tenKhoa}')`, { type: QueryTypes.INSERT })
+            await sequelize.query(`INSERT INTO faculties (MA_KHOA, TEN_KHOA)
+                                         VALUES ('${maKhoa}', '${tenKhoa}')`, { type: QueryTypes.INSERT })
             return res.json({
                 message: 'SUCCESS'
             })            
@@ -33,11 +33,13 @@ class FacultyController {
     // [PUT] /api/faculty/:id
     async update(req,res, next){
         try {
-            const maKhoa = req.params.id
+            const maKhoa = req.params.MA_KHOA
             const tenKhoa = req.body.TEN_KHOA
-            await sequelize.query(`UPDATE faculties
-                                    SET TEN_KHOA = '${tenKhoa}'
-                                    WHERE MA_KHOA LIKE '%${maKhoa}';`, { type: QueryTypes.UPDATE })
+            console.log(req.body)
+            await sequelize.query(`UPDATE faculties 
+                                    SET TEN_KHOA = '${tenKhoa}' 
+                                    WHERE MA_KHOA LIKE '%${maKhoa}'`, 
+                                    { type: QueryTypes.UPDATE })
             return res.json({
                 message: 'SUCCESS'
             })            
@@ -49,9 +51,10 @@ class FacultyController {
     // [DELETE] /api/faculty/:id
     async delete(req,res, next){
         try {
-            const maKhoa = req.body.MA_KHOA
+            const maKhoa = req.params.MA_KHOA
             await sequelize.query(`DELETE FROM faculties 
-                                    WHERE MA_KHOA LIKE'${maKhoa}'`, { type: QueryTypes.DELETE })
+                                        WHERE MA_KHOA LIKE '%${maKhoa}'`, 
+                                    { type: QueryTypes.DELETE })
             return res.json({
                 message: 'SUCCESS'
             })            

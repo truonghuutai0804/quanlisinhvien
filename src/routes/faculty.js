@@ -7,9 +7,9 @@ router.get('/api/faculty', facultyController.index)
 
 router.post('/api/faculty', facultyController.create)
 
-router.put('/api/faculty/:id', facultyController.update)
+router.put('/api/faculty/:MA_KHOA', facultyController.update)
 
-router.delete('/api/faculty/:id', facultyController.delete)
+router.delete('/api/faculty/:MA_KHOA', facultyController.delete)
 
 
 module.exports = router
