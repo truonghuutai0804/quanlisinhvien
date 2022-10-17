@@ -29,6 +29,25 @@ class StudentController {
         }
     }
 
+    // [GET] /api/student/:id
+    async getSV(req,res){
+        try {
+            const maSV = req.params.MA_SV
+            const data = await sequelize.query(`SELECT * FROM students JOIN classes ON students.MA_LOP = classes.MA_LOP 
+                                                                        JOIN provinces ON students.MA_TINH = provinces.MA_TINH
+                                                                        JOIN majors ON classes.MA_CN = majors.MA_CN 
+                                                                        JOIN faculties ON majors.MA_KHOA = faculties.MA_KHOA
+                                                                        WHERE MA_SV LIKE '%${maSV}'`,
+                                                { type: QueryTypes.SELECT, })
+            return res.json({
+                data: data,
+                status: 400
+            })           
+        } catch (error) {
+            console.log('Lỗi nhá:', error)
+        }
+    }
+
     //[POST] /api/student
     async create(req,res){
         try {

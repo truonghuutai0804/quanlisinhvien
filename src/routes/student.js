@@ -5,6 +5,8 @@ const studentController = require('../app/controllers/StudentController')
 
 router.get('/api/student', studentController.index)
 
+router.get('/api/student/:MA_SV', studentController.getSV)
+
 router.post('/api/student', studentController.create)
 
 router.put('/api/student/:MA_SV', studentController.update)

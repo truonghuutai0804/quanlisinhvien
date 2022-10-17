@@ -5,10 +5,10 @@ class YearController {
     // [GET] /api/year
     async index(req,res){
         try {
-            const data = await sequelize.query(`SELECT * FROM years`, { type: QueryTypes.SELECT, })
+            const data = await sequelize.query(`SELECT * FROM years ORDER BY MA_NH DESC`, { type: QueryTypes.SELECT, })
             return res.json({
                 data: data,
-                status: 400
+                message: 'SUCCESS'
             })            
         } catch (error) {
             console.log('Lỗi nhá:', error)
@@ -17,7 +17,7 @@ class YearController {
 
     async create(req,res, next){
         const date = new Date()
-        const dataMA_NH = await sequelize.query(`SELECT MA_NH FROM years ORDER BY MA_NH ASC LIMIT 1`, { type: QueryTypes.SELECT })
+        const dataMA_NH = await sequelize.query(`SELECT MA_NH FROM years ORDER BY MA_NH DESC LIMIT 1`, { type: QueryTypes.SELECT })
         var thang = date.getMonth()+1
         var nam = date.getYear()-100
         if (thang >= 8 && nam !== dataMA_NH[0].MA_NH) {

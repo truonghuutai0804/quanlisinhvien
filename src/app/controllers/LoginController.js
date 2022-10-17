@@ -7,20 +7,40 @@ class LoginController {
         var username = req.body.username
         var password = req.body.password
         if(username !== '' && password !== ''){
-            try {
-                const dataLogin = await sequelize.query(`SELECT MA_GV, HOTEN_GV, MA_CD FROM teachers WHERE MA_GV LIKE '%${username}' AND MATKHAU_GV LIKE '%${password}'`, { type: QueryTypes.SELECT })
-                if (dataLogin.length != 0){
-                    res.json({ 
-                        message: 'SUCCESS',
-                        dataLogin
-                     })
+            if(username.length === 5){
+                try {
+                    const dataLogin = await sequelize.query(`SELECT MA_GV, HOTEN_GV, MA_CD FROM teachers WHERE MA_GV LIKE '%${username}' AND MATKHAU_GV LIKE '%${password}'`, { type: QueryTypes.SELECT })
+                    if (dataLogin.length != 0){
+                        res.json({ 
+                            message: 'SUCCESS',
+                            res: 'TEACHER',
+                            dataLogin
+                         })
+                    }
+                    else{
+                        res.json({ message: 'FAIL' })
+                    }
+                } catch (error) {
+                    res.json({ message: error })
                 }
-                else{
-                    res.json({ message: 'FAIL' })
+            }else{
+                try {
+                    const dataLogin = await sequelize.query(`SELECT MA_SV, HOTEN_SV FROM students WHERE MA_SV LIKE '%${username}' AND MATKHAU_SV LIKE '%${password}'`, { type: QueryTypes.SELECT })
+                    if (dataLogin.length != 0){
+                        res.json({ 
+                            message: 'SUCCESS',
+                            res: 'STUDENT',
+                            dataLogin
+                         })
+                    }
+                    else{
+                        res.json({ message: 'FAIL' })
+                    }
+                } catch (error) {
+                    res.json({ message: error })
                 }
-            } catch (error) {
-                res.json({ message: error })
             }
+            
         }else{
             res.json({ message: 'ERR' });
         }

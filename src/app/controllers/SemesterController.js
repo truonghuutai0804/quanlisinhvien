@@ -8,7 +8,7 @@ class SemesterController {
             const data = await sequelize.query(`SELECT * FROM semesters`, { type: QueryTypes.SELECT, })
             return res.json({
                 data: data,
-                status: 400
+                message: 'SUCCESS'
             })          
         } catch (error) {
             console.log('Lỗi nhá:', error)

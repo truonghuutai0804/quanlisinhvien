@@ -52,6 +52,22 @@ class ScoreController {
         })
     }
 
+    // [GET] /scoreSV/:id
+    async getDiem(req,res){
+        const maSV = req.params.MA_SV
+        const maNH = req.query.MA_NH
+        const maHK = req.query.MA_HK
+        const dataDiem = await sequelize.query(`SELECT subjects.MA_MH, TEN_MH, TIN_CHI, DIEM_SO, DIEM_CHU 
+                                                FROM scores JOIN groups ON scores.MA_NHP = groups.MA_NHP 
+                                                            JOIN subjects ON groups.MA_MH = subjects.MA_MH 
+                                                WHERE MA_NH LIKE '%${maNH}' AND MA_HK LIKE '%${maHK}' 
+                                                                            AND MA_SV LIKE '%${maSV}'`,
+                                                { type: QueryTypes.SELECT })
+        return res.json({
+            dataDiem,
+            message: 'SUCCESS'
+        })
+    }
 
     // [POST] /api/score/
     async create(req,res, next){
