@@ -27,6 +27,24 @@ class TeacherController {
         }
     }
 
+    // [GET] /api/teacher/:MA_GV
+    async getTeacher(req,res){
+        try {
+            const maGV = req.params.MA_GV
+            const dataGV = await sequelize.query(`SELECT * FROM teachers JOIN levels ON teachers.MA_CD = levels.MA_CD 
+                                                JOIN provinces ON teachers.MA_TINH = provinces.MA_TINH 
+                                                WHERE teachers.MA_GV LIKE '%${maGV}'`, { type: QueryTypes.SELECT, })
+            return res.json({
+                dataGV,
+                message: 'SUCCESS'
+            })
+        } catch (error) {
+            console.log('Lỗi nhá:', error)
+        }
+    }
+
+
+
     //[GET] /api/trainer
     async trainer(req,res){
         try {

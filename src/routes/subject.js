@@ -5,6 +5,9 @@ const subjectController = require('../app/controllers/SubjectController')
 
 router.get('/api/subject', subjectController.index)
 
+router.get('/api/subject/:MA_GV', subjectController.getMonHoc)
+
+
 router.post('/api/subject', subjectController.create)
 
 router.put('/api/subject/:MA_MH', subjectController.update)

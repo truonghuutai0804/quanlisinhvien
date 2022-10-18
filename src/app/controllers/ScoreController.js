@@ -69,6 +69,26 @@ class ScoreController {
         })
     }
 
+    // [GET] /scoreGV/:id 
+    async getDiemGV(req,res){
+        const maGV = req.params.MA_GV
+        const maNH = req.query.MA_NH
+        const maHK = req.query.MA_HK
+        const maNHP = req.query.MA_NHP
+        const dataDiem = await sequelize.query(`SELECT students.MA_SV, HOTEN_SV, DIEM_SO, scores.MA_NHP
+                                                FROM scores JOIN groups ON scores.MA_NHP = groups.MA_NHP 
+                                                    JOIN subjects ON groups.MA_MH = subjects.MA_MH 
+                                                    JOIN students ON scores.MA_SV = students.MA_SV 
+                                                WHERE MA_NH LIKE '%${maNH}' AND MA_HK LIKE '%${maHK}' 
+                                                                            AND groups.MA_NHP LIKE '%${maNHP}'
+                                                                            AND MA_GV LIKE '%${maGV}'`,
+                                                { type: QueryTypes.SELECT })
+        return res.json({
+            dataDiem,
+            message: 'SUCCESS'
+        })
+    }
+
     // [POST] /api/score/
     async create(req,res, next){
         try {
@@ -94,7 +114,7 @@ class ScoreController {
             const diemSo = req.body.DIEM_SO
             const diemChu = chuyenDiem(diemSo)
             await sequelize.query(`UPDATE scores 
-                                    SET TEN_KHOA = '${diemSo}', DIEM_CHU = '${diemChu}'
+                                    SET DIEM_SO = '${diemSo}', DIEM_CHU = '${diemChu}'
                                     WHERE MA_NHP LIKE '%${maNHP}' AND MA_SV LIKE '%${maSV}'`, 
                                     { type: QueryTypes.UPDATE })
             return res.json({

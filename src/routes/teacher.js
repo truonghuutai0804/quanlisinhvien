@@ -5,6 +5,8 @@ const teacherController = require('../app/controllers/TeacherController')
 
 router.get('/api/teacher', teacherController.teacher)
 
+router.get('/api/teacher/:MA_GV', teacherController.getTeacher)
+
 router.get('/api/trainer', teacherController.trainer)
 
 router.post('/api/trainteacher', teacherController.create)

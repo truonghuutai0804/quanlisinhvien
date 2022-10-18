@@ -5,10 +5,24 @@ class SubjectController {
     // [GET] /api/subject
     async index(req,res){
         try {
-            const data = await sequelize.query(`SELECT * FROM subjects`, { type: QueryTypes.SELECT, })
+            const data = await sequelize.query(`SELECT * FROM subjects `, { type: QueryTypes.SELECT, })
             return res.json({
                 data: data,
                 status: 400
+            })            
+        } catch (error) {
+            console.log('Lỗi nhá:', error)
+        }
+    }
+
+    // [GET] /api/subject/:MA_GV
+    async getMonHoc(req,res){
+        try {
+            const maGV = req.params.MA_GV
+            const data = await sequelize.query(`SELECT * FROM subjects JOIN groups ON subjects.MA_MH = groups.MA_MH WHERE MA_GV LIKE '%${maGV}' `, { type: QueryTypes.SELECT, })
+            return res.json({
+                data: data,
+                message: 'SUCCESS'
             })            
         } catch (error) {
             console.log('Lỗi nhá:', error)
