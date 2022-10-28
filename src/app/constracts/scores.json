@@ -1,0 +1,230 @@
+[
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "Count",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_MA_NHP",
+          "type": "string"
+        }
+      ],
+      "name": "getScoreGV",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "STT",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "MA_NHP",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "MA_SV",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "HO_TEN",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "MA_MH",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "MON_HOC",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "DIEM_SO",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "MA_HK",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "HOC_KI",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "MA_NH",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "NAM_HOC",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct Scores.userScore[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_MA_SV",
+          "type": "string"
+        }
+      ],
+      "name": "getScoreSV",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "STT",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "MA_NHP",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "MA_SV",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "HO_TEN",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "MA_MH",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "MON_HOC",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "DIEM_SO",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "MA_HK",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "HOC_KI",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "MA_NH",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "NAM_HOC",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct Scores.userScore[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_MA_NHP",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_MA_SV",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_HO_TEN",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_MA_MH",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_MON_HOC",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_DIEM_SO",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_MA_HK",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_HOC_KI",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_MA_NH",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_NAM_HOC",
+          "type": "string"
+        }
+      ],
+      "name": "setScoreGV",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ]

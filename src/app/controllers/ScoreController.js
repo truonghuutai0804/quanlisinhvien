@@ -1,5 +1,6 @@
 const sequelize = require('../config/connectDB')
 const { QueryTypes } = require('sequelize');
+const SmartContractData = require('../data/SmartContractData')
 
 const chuyenDiem = (diem) =>{
     var diemChu = 'A'
@@ -89,7 +90,45 @@ class ScoreController {
         })
     }
 
+    // [GET] /scoreSV/
+    async getDiemBlockchainSV (req, res){
+        try {
+            let getScoreSV = await SmartContractData.getScoreToSV()
+            return res.json({
+                data:  getScoreSV,
+                message: 'SUCCESS',
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    async getDiemBlockchainGV (req, res){
+        try {
+            let getScoreSV = await SmartContractData.getScoreToGV()
+            return res.json({
+                data:  getScoreSV,
+                message: 'SUCCESS',
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     // [POST] /api/score/
+    async setDiemBlockchain (req, res){
+        try {
+            await SmartContractData.setScoreToGV()
+            return res.json({
+                message: 'SUCCESS',
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    // [POST] /api/score/:MA_SV
     async create(req,res, next){
         try {
             const maNHP = req.body.MA_NHP
@@ -106,7 +145,7 @@ class ScoreController {
         }
     }
 
-    // [PUT] /api/score/:id
+    // [PUT] /api/score/:MA_SV
     async update(req,res, next){
         try {
             const maNHP = req.params.MA_NHP
