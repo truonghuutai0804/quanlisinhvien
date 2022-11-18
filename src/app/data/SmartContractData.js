@@ -4,7 +4,7 @@ const abi = require('../constracts/scores.json')
 class SmartContractData {
     constructor(){
         this.web3 = new Web3('http://127.0.0.1:8545');
-        this.address = "0xB6Bd5BE74Df43eeff8fE6243754b767a66c03fB2";
+        this.address = "0x124E9FCfcFABB0041beAb42c26E792C6aEfBfe56";
     }
 
     async connect(){
@@ -16,21 +16,42 @@ class SmartContractData {
         return this.account[idx]
     }
 
-    async getScoreToSV(){
-        const contract = await this.connect() 
-        const getSV = contract.methods.getScoreSV("B1800002").call()
+    async getScoreToAllSV(){
+        const contract = await this.connect()
+        const getSV = contract.methods.getScoreAllSV().call()
         return getSV
     }
 
-    async getScoreToGV(){
-        const contract = await this.connect() 
-        const getSV = contract.methods.getScoreGV("NH00001").call()
+    async getAllScoreToSV(maSV){
+        const contract = await this.connect()
+        const getSV = contract.methods.getAllScoreSV(maSV).call()
         return getSV
     }
 
-    async setDiemBlockchain(){
+    async getScoreToSV(maSV, maHK, maNH){
+        const contract = await this.connect()
+        const getSV = contract.methods.getScoreSV(maSV, maHK, maNH).call()
+        return getSV
+    }
+
+    async getDiemBlockchainGV(maNHP){
+        const contract = await this.connect() 
+        const getSV = contract.methods.getScoreGV(maNHP).call()
+        return getSV
+    }
+
+    async setDiemBlockchain(maNHP, maSV, hotenSV, maMH, tenMH, tinChi, diemSo, diemChu, maHK, maNH){
         const contract = await this.connect()   
-        contract.methods.setScoreGV("NH00002", "B1800002", "Trương Hữu Tài", "CT162", "Lập trình web", "9.5", "1", "1", "21", "2021-2022").send({
+        contract.methods.setScoreGV(maNHP, maSV, hotenSV, maMH, tenMH, tinChi, diemSo, diemChu, maHK, maNH).send({
+            from: await this.getAccount(0),
+            gas: 3000000,
+        })
+    }
+
+
+    async editDiemBlockchain(maSV, maNHP, diemSo, diemChu){
+        const contract = await this.connect()   
+        contract.methods.editScoreGV(maSV, maNHP, diemSo, diemChu).send({
             from: await this.getAccount(0),
             gas: 3000000,
         })

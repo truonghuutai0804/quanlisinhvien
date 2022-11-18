@@ -61,9 +61,30 @@ class TeacherController {
     }
 
     // [POST] /api/trainteacher
-    async create(req,res){
+    async createTeacher(req,res){
         const maGV = req.body.MA_GV
         const maCD = '02'
+        const maTinh = req.body.MA_TINH
+        const tenGV = req.body.HOTEN_GV
+        const gtGV = req.body.GIOITINH_GV
+        const nsGV = req.body.NGAYSINH_GV
+        const sdtGV = req.body.SODIENTHOAI_GV
+        const mkGV = random(8)
+
+        try {
+            await sequelize.query(`INSERT INTO teachers (MA_GV, MA_CD, MA_TINH, HOTEN_GV, GIOITINH_GV, NGAYSINH_GV, SODIENTHOAI_GV, MATKHAU_GV)
+                                    VALUES ('${maGV}', '${maCD}', '${maTinh}', '${tenGV}', '${gtGV}', '${nsGV}', '${sdtGV}', '${mkGV}')`, { type: QueryTypes.INSERT })
+            return res.json({
+                message: 'SUCCESS'
+            })
+        } catch (error) {
+            console.log('Lỗi nhá:', error)
+        }
+    }
+
+    async createTrainer(req,res){
+        const maGV = req.body.MA_GV
+        const maCD = '03'
         const maTinh = req.body.MA_TINH
         const tenGV = req.body.HOTEN_GV
         const gtGV = req.body.GIOITINH_GV

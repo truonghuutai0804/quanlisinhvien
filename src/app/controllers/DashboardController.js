@@ -18,9 +18,9 @@ class DashboardController {
                 { type: QueryTypes.SELECT, }
             )
             const dataDiem = await sequelize.query(
-                'SELECT (SUM(DIEM_SO*TIN_CHI)/(COUNT(*)*TIN_CHI)) AS TONG FROM scores '+
-                'JOIN groups ON scores.MA_NHP = groups.MA_NHP '+
-                'JOIN subjects ON groups.MA_MH = subjects.MA_MH',
+                `SELECT (SUM(DIEM_SO*TIN_CHI)/(COUNT(*)*TIN_CHI)) AS TONG FROM scores 
+                JOIN groups ON scores.MA_NHP = groups.MA_NHP 
+                JOIN subjects ON groups.MA_MH = subjects.MA_MH`,
                 { type: QueryTypes.SELECT, }
             )
             return res.json({

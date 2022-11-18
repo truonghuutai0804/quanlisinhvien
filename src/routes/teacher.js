@@ -9,7 +9,9 @@ router.get('/api/teacher/:MA_GV', teacherController.getTeacher)
 
 router.get('/api/trainer', teacherController.trainer)
 
-router.post('/api/trainteacher', teacherController.create)
+router.post('/api/teacher', teacherController.createTeacher)
+
+router.post('/api/trainer', teacherController.createTrainer)
 
 router.put('/api/trainteacher/:MA_GV', teacherController.update)
 

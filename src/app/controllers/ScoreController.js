@@ -39,13 +39,13 @@ class ScoreController {
     // [GET] /score/:id 
     async diemChiTiet(req,res){
         const maSV = req.params.MA_SV
-        const diemSo = 3.5
-        const diemChu = chuyenDiem(diemSo)
-        console.log(diemChu);
-        const dataDiem = await sequelize.query(`SELECT groups.MA_NHP, TEN_MH, TIN_CHI, DIEM_SO, DIEM_CHU 
-                                                FROM scores JOIN groups ON scores.MA_NHP = groups.MA_NHP 
-                                                            JOIN subjects ON subjects.MA_MH = groups.MA_MH
-                                                            WHERE MA_SV LIKE '%${maSV}'`,
+        const maHK = req.query.MA_HK
+        const maNH = req.query.MA_NH
+
+        const dataDiem = await sequelize.query(`SELECT * FROM scores 
+                                                    JOIN groups ON scores.MA_NHP = groups.MA_NHP 
+                                                    JOIN subjects ON subjects.MA_MH = groups.MA_MH
+                                                WHERE MA_SV LIKE '%${maSV}' AND MA_HK = '${maHK}' AND MA_NH = '${maNH}'`,
                                                 { type: QueryTypes.SELECT })
         return res.json({
             data: dataDiem,
@@ -73,16 +73,12 @@ class ScoreController {
     // [GET] /scoreGV/:id 
     async getDiemGV(req,res){
         const maGV = req.params.MA_GV
-        const maNH = req.query.MA_NH
-        const maHK = req.query.MA_HK
         const maNHP = req.query.MA_NHP
-        const dataDiem = await sequelize.query(`SELECT students.MA_SV, HOTEN_SV, DIEM_SO, scores.MA_NHP
+        const dataDiem = await sequelize.query(`SELECT groups.MA_NHP, students.MA_SV, HOTEN_SV, subjects.MA_MH, DIEM_SO, TEN_MH, MA_HK, MA_NH, TIN_CHI, THEM_DIEM
                                                 FROM scores JOIN groups ON scores.MA_NHP = groups.MA_NHP 
                                                     JOIN subjects ON groups.MA_MH = subjects.MA_MH 
                                                     JOIN students ON scores.MA_SV = students.MA_SV 
-                                                WHERE MA_NH LIKE '%${maNH}' AND MA_HK LIKE '%${maHK}' 
-                                                                            AND groups.MA_NHP LIKE '%${maNHP}'
-                                                                            AND MA_GV LIKE '%${maGV}'`,
+                                                WHERE   groups.MA_NHP LIKE '%${maNHP}' AND MA_GV LIKE '%${maGV}'`,
                                                 { type: QueryTypes.SELECT })
         return res.json({
             dataDiem,
@@ -90,10 +86,10 @@ class ScoreController {
         })
     }
 
-    // [GET] /scoreSV/
-    async getDiemBlockchainSV (req, res){
+    // [GET] /scoreAllSV/
+    async getDiemBlockchainAllSV (req, res){
         try {
-            let getScoreSV = await SmartContractData.getScoreToSV()
+            let getScoreSV = await SmartContractData.getScoreToAllSV()
             return res.json({
                 data:  getScoreSV,
                 message: 'SUCCESS',
@@ -103,10 +99,41 @@ class ScoreController {
         }
     }
 
+    // [GET] /allScoreSV/:MA_SV
+    async getAllDiemBlockchainSV (req, res){
+        const MA_SV = req.params.MA_SV
+        try {
+            let getScoreSV = await SmartContractData.getAllScoreToSV(MA_SV)
+            return res.json({
+                data:  getScoreSV,
+                message: 'SUCCESS',
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
+    // [GET] /scoreSV/:MA_SV
+    async getDiemBlockchainSV (req, res){
+        const MA_SV = req.params.MA_SV
+        const MA_HK = req.query.MA_HK
+        const MA_NH = req.query.MA_NH
+        try {
+            let getScoreSV = await SmartContractData.getScoreToSV(MA_SV, MA_HK, MA_NH)
+            return res.json({
+                data:  getScoreSV,
+                message: 'SUCCESS',
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    // [GET] /api/scoreGV/Blockchain/:MA_NHP
     async getDiemBlockchainGV (req, res){
         try {
-            let getScoreSV = await SmartContractData.getScoreToGV()
+            const MA_NHP = req.params.MA_NHP
+            let getScoreSV = await SmartContractData.getDiemBlockchainGV(MA_NHP)
             return res.json({
                 data:  getScoreSV,
                 message: 'SUCCESS',
@@ -116,10 +143,38 @@ class ScoreController {
         }
     }
 
-    // [POST] /api/score/
+    // [POST] /api/scoreGV/:MA_NHP
     async setDiemBlockchain (req, res){
+        const MA_NHP = req.body.MA_NHP
+        const MA_SV = req.body.MA_SV
+        const HOTEN_SV = req.body.HOTEN_SV
+        const MA_MH = req.body.MA_MH
+        const TEN_MH = req.body.TEN_MH
+        const TIN_CHI = req.body.TIN_CHI
+        const DIEM_SO = req.body.DIEM_SO
+        const DIEM_CHU = chuyenDiem(DIEM_SO)
+        const MA_HK = req.body.MA_HK
+        const MA_NH = req.body.MA_NH
         try {
-            await SmartContractData.setScoreToGV()
+            await SmartContractData.setDiemBlockchain(MA_NHP, MA_SV, HOTEN_SV, MA_MH, TEN_MH, TIN_CHI, DIEM_SO, DIEM_CHU, MA_HK, MA_NH)
+            await sequelize.query(`UPDATE scores SET THEM_DIEM = 1 WHERE MA_NHP LIKE '%${MA_NHP}' AND MA_SV LIKE '%${MA_SV}'`, { type: QueryTypes.UPDATE })
+            
+            return res.json({
+                message: 'SUCCESS',
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    // [PUT] /api/scoreAD/
+    async editDiemBlockchain (req, res){
+        const MA_NHP = req.body[1]
+        const MA_SV = req.params.MA_SV
+        const DIEM_SO = req.body[7]
+        const DIEM_CHU = chuyenDiem(DIEM_SO)
+        try {
+            await SmartContractData.editDiemBlockchain(MA_SV, MA_NHP, DIEM_SO, DIEM_CHU)
             return res.json({
                 message: 'SUCCESS',
             })
@@ -133,32 +188,33 @@ class ScoreController {
         try {
             const maNHP = req.body.MA_NHP
             const maSV = req.params.MA_SV
-            const diemSo = ''
-            const diemChu = ''
-            await sequelize.query(`INSERT INTO scores (MA_NHP, MA_SV, DIEM_SO, DIEM_CHU)
-                                         VALUES ('${maNHP}', '${maSV}', '${diemSo}', '${diemChu}')`, { type: QueryTypes.INSERT })
+            await sequelize.query(`INSERT INTO scores (MA_NHP, MA_SV)
+                                         VALUES ('${maNHP}', '${maSV}')`, { type: QueryTypes.INSERT })
             return res.json({
                 message: 'SUCCESS'
             })            
         } catch (error) {
-            console.log('Lỗi nhá:', error)
+            return res.json({
+                message: 'FAIL'
+            }) 
         }
     }
 
-    // [PUT] /api/score/:MA_SV
+    // [PUT] /api/score/:MA_NHP
     async update(req,res, next){
         try {
-            const maNHP = req.params.MA_NHP
-            const maSV = req.query.MA_SV
-            const diemSo = req.body.DIEM_SO
-            const diemChu = chuyenDiem(diemSo)
-            await sequelize.query(`UPDATE scores 
-                                    SET DIEM_SO = '${diemSo}', DIEM_CHU = '${diemChu}'
-                                    WHERE MA_NHP LIKE '%${maNHP}' AND MA_SV LIKE '%${maSV}'`, 
-                                    { type: QueryTypes.UPDATE })
-            return res.json({
-                message: 'SUCCESS'
-            })            
+            console.log(req.body);
+            // const maNHP = req.params.MA_NHP
+            // const maSV = req.query.MA_SV
+            // const diemSo = req.body.DIEM_SO
+            // const diemChu = chuyenDiem(diemSo)
+            // await sequelize.query(`UPDATE scores 
+            //                         SET DIEM_SO = '${diemSo}', DIEM_CHU = '${diemChu}'
+            //                         WHERE MA_NHP LIKE '%${maNHP}' AND MA_SV LIKE '%${maSV}'`, 
+            //                         { type: QueryTypes.UPDATE })
+            // return res.json({
+            //     message: 'SUCCESS'
+            // })            
         } catch (error) {
             console.log('Lỗi nhá:', error)
         }

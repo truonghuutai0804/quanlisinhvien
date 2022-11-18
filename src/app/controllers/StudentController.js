@@ -29,6 +29,54 @@ class StudentController {
         }
     }
 
+    // [GET] /api/student
+    async getSVZ(req,res){
+        try {
+            const sort = req.query.SORT
+            var data
+            switch (sort) {
+                case "1":
+                    data = await sequelize.query(`SELECT * FROM students JOIN classes ON students.MA_LOP = classes.MA_LOP 
+                                                                                JOIN provinces ON students.MA_TINH = provinces.MA_TINH 
+                                                                                JOIN majors ON classes.MA_CN = majors.MA_CN 
+                                                                                JOIN faculties ON majors.MA_KHOA = faculties.MA_KHOA
+                                                        ORDER BY MA_SV DESC`,
+                                                        { type: QueryTypes.SELECT, })
+                    break;
+                case "2":
+                    data = await sequelize.query(`SELECT * FROM students JOIN classes ON students.MA_LOP = classes.MA_LOP 
+                                                                                JOIN provinces ON students.MA_TINH = provinces.MA_TINH 
+                                                                                JOIN majors ON classes.MA_CN = majors.MA_CN 
+                                                                                JOIN faculties ON majors.MA_KHOA = faculties.MA_KHOA
+                                                        ORDER BY HOTEN_SV ASC`,
+                                                        { type: QueryTypes.SELECT, })
+                    break;
+                case "3":
+                    data = await sequelize.query(`SELECT * FROM students JOIN classes ON students.MA_LOP = classes.MA_LOP 
+                                                                                JOIN provinces ON students.MA_TINH = provinces.MA_TINH 
+                                                                                JOIN majors ON classes.MA_CN = majors.MA_CN 
+                                                                                JOIN faculties ON majors.MA_KHOA = faculties.MA_KHOA
+                                                        ORDER BY HOTEN_SV DESC`,
+                                                        { type: QueryTypes.SELECT, })
+                    break;
+                default:
+                    data = await sequelize.query(`SELECT * FROM students JOIN classes ON students.MA_LOP = classes.MA_LOP 
+                                                                                JOIN provinces ON students.MA_TINH = provinces.MA_TINH 
+                                                                                JOIN majors ON classes.MA_CN = majors.MA_CN 
+                                                                                JOIN faculties ON majors.MA_KHOA = faculties.MA_KHOA
+                                                        ORDER BY MA_SV ASC`,
+                                                        { type: QueryTypes.SELECT, })
+                    break;
+            }
+            return res.json({
+                data: data,
+                status: 400
+            })           
+        } catch (error) {
+            console.log('Lỗi nhá:', error)
+        }
+    }
+
     // [GET] /api/student/:id
     async getSV(req,res){
         try {
@@ -60,7 +108,7 @@ class StudentController {
             const sdtSV = req.body.SODIENTHOAI_SV
             const mkSV = random(8)
 
-            await sequelize.query(`INSERT INTO students (MA_SV, MA_LOP, MA_TINH, HOTEN_SV, GIOITINH_SV, NGAYSINH_SV, SODIENTHOAI_SV. MATKHAU_SV )
+            await sequelize.query(`INSERT INTO students (MA_SV, MA_LOP, MA_TINH, HOTEN_SV, GIOITINH_SV, NGAYSINH_SV, SODIENTHOAI_SV, MATKHAU_SV )
                                             VALUES ('${maSV}', '${maLop}', '${maTinh}', '${tenSV}', '${gtSV}', '${nsSV}', '${sdtSV}', '${mkSV}')`,
                                                 { type: QueryTypes.INSERT })
             return res.json({

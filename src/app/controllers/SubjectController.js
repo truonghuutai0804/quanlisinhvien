@@ -32,7 +32,7 @@ class SubjectController {
     // [POST] /api/subject
     async create(req,res, next){
         try {
-            const maMH = req.params.MA_MH
+            const maMH = req.body.MA_MH
             const tenMH = req.body.TEN_MH
             const maKhoa = req.body.MA_KHOA
             const tinChi = req.body.TIN_CHI
@@ -56,7 +56,7 @@ class SubjectController {
             const tinChi = req.body.TIN_CHI
 
             await sequelize.query(`UPDATE subjects 
-                                    SET TEN_MH = '${tenMH}', TEN_KHOA = '${maKhoa}', TIN_CHI = '${tinChi}' 
+                                    SET TEN_MH = '${tenMH}', MA_KHOA = '${maKhoa}', TIN_CHI = '${tinChi}' 
                                     WHERE MA_MH LIKE '%${maMH}'`, 
                                     { type: QueryTypes.UPDATE })
             return res.json({
