@@ -29,6 +29,20 @@ class SubjectController {
         }
     }
 
+     // [GET] /api/subjects/:MA_SV
+     async getDangKyHocPhan(req,res){
+        try {
+            const maSV = req.params.MA_SV
+            const data = await sequelize.query(`SELECT * FROM subjects WHERE MA_MH NOT IN ( SELECT subjects.MA_MH FROM groups JOIN subjects ON groups.MA_MH = subjects.MA_MH JOIN scores ON groups.MA_NHP = scores.MA_NHP JOIN students ON scores.MA_SV = students.MA_SV WHERE scores.MA_SV LIKE '%${maSV}' ); `, { type: QueryTypes.SELECT, })
+            return res.json({
+                data: data,
+                message: 'SUCCESS'
+            })            
+        } catch (error) {
+            console.log('Lỗi nhá:', error)
+        }
+    }
+
     // [POST] /api/subject
     async create(req,res, next){
         try {

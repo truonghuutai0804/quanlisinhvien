@@ -24,12 +24,37 @@ class GroupController {
     async getGroups(req,res){
         try {
             const MA_MH = req.params.MA_MH
+
             const data = await sequelize.query(`SELECT * FROM groups 
                                                     JOIN subjects ON groups.MA_MH = subjects.MA_MH 
                                                     JOIN teachers ON groups.MA_GV = teachers.MA_GV
                                                     JOIN semesters ON groups.MA_HK = semesters.MA_HK 
                                                     JOIN years ON groups.MA_NH = years.MA_NH
                                                 WHERE groups.MA_MH LIKE '%${MA_MH}'
+                                                ORDER BY groups.MA_NHP ASC`, 
+                                                { type: QueryTypes.SELECT, })
+            return res.json({
+                data: data,
+                message: 'SUCCESS'
+            })            
+        } catch (error) {
+            console.log('Lỗi nhá:', error)
+        }
+    }
+
+    // [GET] /api/group/:MA_MH
+    async getHocPhan(req,res){
+        try {
+            const MA_MH = req.params.MA_MH
+            const MA_HK = req.query.MA_HK
+            const MA_NH = req.query.MA_NH
+
+            const data = await sequelize.query(`SELECT * FROM groups 
+                                                    JOIN subjects ON groups.MA_MH = subjects.MA_MH 
+                                                    JOIN teachers ON groups.MA_GV = teachers.MA_GV
+                                                    JOIN semesters ON groups.MA_HK = semesters.MA_HK 
+                                                    JOIN years ON groups.MA_NH = years.MA_NH
+                                                WHERE groups.MA_MH LIKE '%${MA_MH}' AND groups.MA_HK LIKE '%${MA_HK}' AND groups.MA_NH LIKE '%${MA_NH}'
                                                 ORDER BY groups.MA_NHP ASC`, 
                                                 { type: QueryTypes.SELECT, })
             return res.json({
@@ -70,14 +95,11 @@ class GroupController {
             const maHK = req.body.MA_HK
             const maNH = req.body.MA_NH
             const soLuong = req.body.SO_LUONG
-            const soLuongCu = req.body.SO_LUONG_CU
-            let conLai = 0
-            if(soLuong > soLuongCu) {conLai = req.body.CON_LAI + (soLuong - soLuongCu)}
-            else conLai = req.body.CON_LAI - (soLuongCu - soLuong)
+            const conLai = req.body.CON_LAI
             
-            if(maNHP !== "" && maMH !== "" && maGV !== "" && maHK !== "" && maNH !== "" && conLai>0){
+            if(maMH !== "" && maGV !== "" && maHK !== "" && maNH !== ""){
                 await sequelize.query(`UPDATE groups
-                                        SET MA_MH = '${maMH}', MA_GV = '${maGV}', MA_HK = '${maHK}', MA_NH = '${maNH}', SO_LUONG = '${soLuong}', SO_LUONG_CU = '${soLuong}', CON_LAI = '${conLai}'
+                                        SET MA_MH = '${maMH}', MA_GV = '${maGV}', MA_HK = '${maHK}', MA_NH = '${maNH}', SO_LUONG = '${soLuong}', CON_LAI = '${conLai}'
                                         WHERE MA_NHP LIKE '%${maNHP}'`,
                                         { type: QueryTypes.UPDATE })
     

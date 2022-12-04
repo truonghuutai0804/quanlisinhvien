@@ -36,6 +36,21 @@ class ScoreController {
         }
     }
 
+    // [GET] /scores/:id 
+    async getTongDiemSV(req,res){
+        const maSV = req.params.MA_SV
+
+        const data = await sequelize.query(`SELECT * FROM scores 
+                                                JOIN groups ON scores.MA_NHP = groups.MA_NHP
+                                                JOIN subjects ON subjects.MA_MH = groups.MA_MH
+                                            WHERE MA_SV LIKE '%${maSV}'`,
+                                            { type: QueryTypes.SELECT })
+    return res.json({
+            data: data,
+            message: 'SUCCESS'
+        })
+    }
+
     // [GET] /score/:id 
     async diemChiTiet(req,res){
         const maSV = req.params.MA_SV
@@ -74,7 +89,7 @@ class ScoreController {
     async getDiemGV(req,res){
         const maGV = req.params.MA_GV
         const maNHP = req.query.MA_NHP
-        const dataDiem = await sequelize.query(`SELECT groups.MA_NHP, students.MA_SV, HOTEN_SV, subjects.MA_MH, DIEM_SO, TEN_MH, MA_HK, MA_NH, TIN_CHI, THEM_DIEM
+        const dataDiem = await sequelize.query(`SELECT groups.MA_NHP, students.MA_SV, HOTEN_SV, subjects.MA_MH, DIEM_SO, DIEM_CHU, TEN_MH, MA_HK, MA_NH, TIN_CHI
                                                 FROM scores JOIN groups ON scores.MA_NHP = groups.MA_NHP 
                                                     JOIN subjects ON groups.MA_MH = subjects.MA_MH 
                                                     JOIN students ON scores.MA_SV = students.MA_SV 
@@ -155,15 +170,28 @@ class ScoreController {
         const DIEM_CHU = chuyenDiem(DIEM_SO)
         const MA_HK = req.body.MA_HK
         const MA_NH = req.body.MA_NH
-        try {
-            await SmartContractData.setDiemBlockchain(MA_NHP, MA_SV, HOTEN_SV, MA_MH, TEN_MH, TIN_CHI, DIEM_SO, DIEM_CHU, MA_HK, MA_NH)
-            await sequelize.query(`UPDATE scores SET THEM_DIEM = 1 WHERE MA_NHP LIKE '%${MA_NHP}' AND MA_SV LIKE '%${MA_SV}'`, { type: QueryTypes.UPDATE })
-            
+        if(DIEM_SO > 0 && DIEM_SO <= 10){
+            try {
+                await SmartContractData.setDiemBlockchain(MA_NHP, MA_SV, HOTEN_SV, MA_MH, TEN_MH, TIN_CHI, DIEM_SO, DIEM_CHU, MA_HK, MA_NH)
+                
+                await sequelize.query(`UPDATE scores 
+                                        SET DIEM_SO = '${DIEM_SO}', DIEM_CHU = '${DIEM_CHU}'
+                                        WHERE MA_NHP LIKE '%${MA_NHP}' AND MA_SV LIKE '%${MA_SV}'`, 
+                                 { type: QueryTypes.UPDATE })
+
+                return res.json({
+                    message: 'SUCCESS',
+                })
+            } catch (error) {
+                return res.json({
+                    message: 'FAIL',
+                    err: error
+                })
+            }
+        }else{
             return res.json({
-                message: 'SUCCESS',
+                message: 'FAIL',
             })
-        } catch (error) {
-            console.log(error)
         }
     }
 
@@ -173,13 +201,26 @@ class ScoreController {
         const MA_SV = req.params.MA_SV
         const DIEM_SO = req.body[7]
         const DIEM_CHU = chuyenDiem(DIEM_SO)
-        try {
-            await SmartContractData.editDiemBlockchain(MA_SV, MA_NHP, DIEM_SO, DIEM_CHU)
+        if(DIEM_SO > 0 && DIEM_SO <= 10){
+            try {
+                await SmartContractData.editDiemBlockchain(MA_SV, MA_NHP, DIEM_SO, DIEM_CHU)
+                await sequelize.query(`UPDATE scores 
+                                        SET DIEM_SO = '${DIEM_SO}', DIEM_CHU = '${DIEM_CHU}'
+                                        WHERE MA_NHP LIKE '%${MA_NHP}' AND MA_SV LIKE '%${MA_SV}'`, 
+                                 { type: QueryTypes.UPDATE })
+                return res.json({
+                    message: 'SUCCESS',
+                })
+            } catch (error) {
+                return res.json({
+                    message: 'FAIL',
+                    err: error
+                })
+            }
+        }else{
             return res.json({
-                message: 'SUCCESS',
+                message: 'FAIL',
             })
-        } catch (error) {
-            console.log(error)
         }
     }
 
@@ -188,8 +229,12 @@ class ScoreController {
         try {
             const maNHP = req.body.MA_NHP
             const maSV = req.params.MA_SV
+            await sequelize.query(` UPDATE groups SET CON_LAI = CON_LAI - 1 WHERE MA_NHP = ${maNHP}`, { type: QueryTypes.UPDATE })
+
             await sequelize.query(`INSERT INTO scores (MA_NHP, MA_SV)
                                          VALUES ('${maNHP}', '${maSV}')`, { type: QueryTypes.INSERT })
+            
+
             return res.json({
                 message: 'SUCCESS'
             })            

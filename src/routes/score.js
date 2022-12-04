@@ -9,7 +9,9 @@ router.get('/api/score', scoreController.index)
 
 // router.get('/api/scoreSV/:MA_SV', scoreController.getDiem)
 
- router.get('/api/scoreGV/:MA_GV', scoreController.getDiemGV)
+router.get('/api/scores/:MA_SV', scoreController.getTongDiemSV)
+
+router.get('/api/scoreGV/:MA_GV', scoreController.getDiemGV)
 
 router.get('/api/score/:MA_SV', scoreController.diemChiTiet)
 

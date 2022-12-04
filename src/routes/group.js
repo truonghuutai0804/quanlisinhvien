@@ -7,6 +7,8 @@ router.get('/api/group', groupController.index)
 
 router.get('/api/groups/:MA_MH', groupController.getGroups)
 
+router.get('/api/group/:MA_MH', groupController.getHocPhan)
+
 router.post('/api/group', groupController.create)
 
 router.put('/api/group/:MA_NHP', groupController.update)

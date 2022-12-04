@@ -4,7 +4,7 @@ const abi = require('../constracts/scores.json')
 class SmartContractData {
     constructor(){
         this.web3 = new Web3('http://127.0.0.1:8545');
-        this.address = "0x124E9FCfcFABB0041beAb42c26E792C6aEfBfe56";
+        this.address = "0x678B4091695ed835764eba78050323268903Ea1b";
     }
 
     async connect(){
