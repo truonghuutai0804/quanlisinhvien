@@ -12,6 +12,7 @@ const studentRouter = require('./student')
 const subjectRouter = require('./subject')
 const teacherRouter = require('./teacher')
 const yearRouter = require('./year')
+const reasonRouter = require('./reason')
 
 
 function route(app){
@@ -28,6 +29,7 @@ function route(app){
     app.use(subjectRouter)
     app.use(teacherRouter)
     app.use(yearRouter)
+    app.use(reasonRouter)
     app.use('/', siteRouter)
 }
 

@@ -89,7 +89,42 @@ class ScoreController {
     async getDiemGV(req,res){
         const maGV = req.params.MA_GV
         const maNHP = req.query.MA_NHP
-        const dataDiem = await sequelize.query(`SELECT groups.MA_NHP, students.MA_SV, HOTEN_SV, subjects.MA_MH, DIEM_SO, DIEM_CHU, TEN_MH, MA_HK, MA_NH, TIN_CHI
+        const dataDiem = await sequelize.query(`SELECT groups.MA_NHP, students.MA_SV, HOTEN_SV, subjects.MA_MH, DIEM_SO, DIEM_CHU, TEN_MH, MA_HK, MA_NH, TIN_CHI, MA_LD
+                                                FROM scores JOIN groups ON scores.MA_NHP = groups.MA_NHP 
+                                                    JOIN subjects ON groups.MA_MH = subjects.MA_MH 
+                                                    JOIN students ON scores.MA_SV = students.MA_SV 
+                                                WHERE   groups.MA_NHP LIKE '%${maNHP}' AND MA_GV LIKE '%${maGV}'`,
+                                                { type: QueryTypes.SELECT })
+        return res.json({
+            dataDiem,
+            message: 'SUCCESS'
+        })
+    }
+
+    // GET api/scoreSVPrintGV/:MA_GV
+    async getDSSVPrintGV(req,res){
+        const maGV = req.params.MA_GV
+        const maNHP = req.query.MA_NHP
+        const dataDiem = await sequelize.query(`SELECT * FROM scores 
+                                                    JOIN groups ON scores.MA_NHP = groups.MA_NHP 
+                                                    JOIN subjects ON groups.MA_MH = subjects.MA_MH 
+                                                    JOIN students ON scores.MA_SV = students.MA_SV
+                                                    JOIN years ON groups.MA_NH = years.MA_NH
+                                                    JOIN semesters ON groups.MA_HK = semesters.MA_HK
+                                                    JOIN reasons ON scores.MA_LD = reasons.MA_LD 
+                                                WHERE   groups.MA_NHP LIKE '%${maNHP}' AND MA_GV LIKE '%${maGV}'`,
+                                                { type: QueryTypes.SELECT })
+        return res.json({
+            dataDiem,
+            message: 'SUCCESS'
+        })
+    }
+
+    // [GET] /scoreGV/:id 
+    async getDiemExGV(req,res){
+        const maGV = req.params.MA_GV
+        const maNHP = req.query.MA_NHP
+        const dataDiem = await sequelize.query(`SELECT groups.MA_NHP, students.MA_SV, HOTEN_SV, subjects.MA_MH, DIEM_SO, TEN_MH, TIN_CHI
                                                 FROM scores JOIN groups ON scores.MA_NHP = groups.MA_NHP 
                                                     JOIN subjects ON groups.MA_MH = subjects.MA_MH 
                                                     JOIN students ON scores.MA_SV = students.MA_SV 
@@ -168,14 +203,14 @@ class ScoreController {
         const TIN_CHI = req.body.TIN_CHI
         const DIEM_SO = req.body.DIEM_SO
         const DIEM_CHU = chuyenDiem(DIEM_SO)
-        const MA_HK = req.body.MA_HK
-        const MA_NH = req.body.MA_NH
+        const LY_DO = 'L0'
+
         if(DIEM_SO > 0 && DIEM_SO <= 10){
             try {
-                await SmartContractData.setDiemBlockchain(MA_NHP, MA_SV, HOTEN_SV, MA_MH, TEN_MH, TIN_CHI, DIEM_SO, DIEM_CHU, MA_HK, MA_NH)
+                await SmartContractData.setDiemBlockchain(MA_NHP, MA_SV, HOTEN_SV, MA_MH, TEN_MH, TIN_CHI, DIEM_SO, DIEM_CHU, LY_DO)
                 
                 await sequelize.query(`UPDATE scores 
-                                        SET DIEM_SO = '${DIEM_SO}', DIEM_CHU = '${DIEM_CHU}'
+                                        SET DIEM_SO = '${DIEM_SO}', DIEM_CHU = '${DIEM_CHU}', MA_LD = '${LY_DO}'
                                         WHERE MA_NHP LIKE '%${MA_NHP}' AND MA_SV LIKE '%${MA_SV}'`, 
                                  { type: QueryTypes.UPDATE })
 
@@ -195,17 +230,60 @@ class ScoreController {
         }
     }
 
+    async setDiemImport (req, res){
+        const datas = req.body
+        for(var i = 0; i < datas.length; i++){
+            var data = datas[i]
+            const MA_NHP = data[0]
+            const MA_SV = data[1]
+            const HOTEN_SV = data[2]
+            const MA_MH = data[3]
+            const TEN_MH = data[4]
+            const TIN_CHI = data[5]
+            const DIEM_SO_1 = data[6].toString()
+            const DIEM_SO_2 = data[6]
+            const DIEM_CHU = chuyenDiem(DIEM_SO_2)
+            const LY_DO = 'L0'
+            if(DIEM_SO_2 > 0 && DIEM_SO_2 <= 10){
+                try {
+                    await SmartContractData.setDiemBlockchain(MA_NHP, MA_SV, HOTEN_SV, MA_MH, TEN_MH, TIN_CHI, DIEM_SO_1, DIEM_CHU, LY_DO)
+                    
+                    await sequelize.query(`UPDATE scores 
+                                            SET DIEM_SO = '${DIEM_SO_2}', DIEM_CHU = '${DIEM_CHU}', MA_LD = '${LY_DO}'
+                                            WHERE MA_NHP LIKE '%${MA_NHP}' AND MA_SV LIKE '%${MA_SV}'`, 
+                                     { type: QueryTypes.UPDATE })
+    
+                } catch (error) {
+                    return res.json({
+                        message: 'FAIL',
+                        err: error
+                    })
+                }
+            }else{
+                return res.json({
+                    message: 'FAIL',
+                })
+            }
+        }
+        return res.json({
+            message: 'SUCCESS',
+        })
+    }
+
     // [PUT] /api/scoreAD/
     async editDiemBlockchain (req, res){
-        const MA_NHP = req.body[1]
+        const MA_NHP = req.body.MA_NHP
         const MA_SV = req.params.MA_SV
-        const DIEM_SO = req.body[7]
+        const DIEM_SO = req.body.DIEM_SO
         const DIEM_CHU = chuyenDiem(DIEM_SO)
+        const LY_DO = req.body.MA_LD
+        console.log(req.body)
         if(DIEM_SO > 0 && DIEM_SO <= 10){
             try {
-                await SmartContractData.editDiemBlockchain(MA_SV, MA_NHP, DIEM_SO, DIEM_CHU)
+                await SmartContractData.editDiemBlockchain(MA_SV, MA_NHP, DIEM_SO, DIEM_CHU, LY_DO)
+
                 await sequelize.query(`UPDATE scores 
-                                        SET DIEM_SO = '${DIEM_SO}', DIEM_CHU = '${DIEM_CHU}'
+                                        SET DIEM_SO = '${DIEM_SO}', DIEM_CHU = '${DIEM_CHU}', MA_LD = '${LY_DO}'
                                         WHERE MA_NHP LIKE '%${MA_NHP}' AND MA_SV LIKE '%${MA_SV}'`, 
                                  { type: QueryTypes.UPDATE })
                 return res.json({
@@ -245,23 +323,19 @@ class ScoreController {
         }
     }
 
-    // [PUT] /api/score/:MA_NHP
-    async update(req,res, next){
+    async delete(req, res){
         try {
-            console.log(req.body);
-            // const maNHP = req.params.MA_NHP
-            // const maSV = req.query.MA_SV
-            // const diemSo = req.body.DIEM_SO
-            // const diemChu = chuyenDiem(diemSo)
-            // await sequelize.query(`UPDATE scores 
-            //                         SET DIEM_SO = '${diemSo}', DIEM_CHU = '${diemChu}'
-            //                         WHERE MA_NHP LIKE '%${maNHP}' AND MA_SV LIKE '%${maSV}'`, 
-            //                         { type: QueryTypes.UPDATE })
-            // return res.json({
-            //     message: 'SUCCESS'
-            // })            
+            const maSV = req.params.MA_SV
+            await sequelize.query(` DELETE FROM scores WHERE MA_SV LIKE '%${maSV}'`, { type: QueryTypes.DELETE })
+
+            return res.json({
+                message: 'SUCCESS'
+            }) 
         } catch (error) {
-            console.log('Lỗi nhá:', error)
+            return res.json({
+                message: 'FAIL',
+                err: error
+            }) 
         }
     }
 

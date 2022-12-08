@@ -38,6 +38,11 @@
         "internalType": "string",
         "name": "_DIEM_CHU",
         "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "_LY_DO",
+        "type": "string"
       }
     ],
     "name": "editScoreGV",
@@ -74,7 +79,7 @@
           },
           {
             "internalType": "string",
-            "name": "HO_TEN",
+            "name": "HOTEN_SV",
             "type": "string"
           },
           {
@@ -103,84 +108,9 @@
             "type": "string"
           },
           {
-            "internalType": "uint256",
-            "name": "MA_HK",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "MA_NH",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct Scores.userScore[]",
-        "name": "",
-        "type": "tuple[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getScoreAllSV",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "STT",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "MA_NHP",
-            "type": "uint256"
-          },
-          {
             "internalType": "string",
-            "name": "MA_SV",
+            "name": "LY_DO",
             "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "HO_TEN",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "MA_MH",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "MON_HOC",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "TIN_CHI",
-            "type": "uint256"
-          },
-          {
-            "internalType": "string",
-            "name": "DIEM_SO",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "DIEM_CHU",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "MA_HK",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "MA_NH",
-            "type": "uint256"
           }
         ],
         "internalType": "struct Scores.userScore[]",
@@ -220,7 +150,7 @@
           },
           {
             "internalType": "string",
-            "name": "HO_TEN",
+            "name": "HOTEN_SV",
             "type": "string"
           },
           {
@@ -249,100 +179,9 @@
             "type": "string"
           },
           {
-            "internalType": "uint256",
-            "name": "MA_HK",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "MA_NH",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct Scores.userScore[]",
-        "name": "",
-        "type": "tuple[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "_MA_SV",
-        "type": "string"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_MA_HK",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_MA_NH",
-        "type": "uint256"
-      }
-    ],
-    "name": "getScoreSV",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "uint256",
-            "name": "STT",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "MA_NHP",
-            "type": "uint256"
-          },
-          {
             "internalType": "string",
-            "name": "MA_SV",
+            "name": "LY_DO",
             "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "HO_TEN",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "MA_MH",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "MON_HOC",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "TIN_CHI",
-            "type": "uint256"
-          },
-          {
-            "internalType": "string",
-            "name": "DIEM_SO",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "DIEM_CHU",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "MA_HK",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "MA_NH",
-            "type": "uint256"
           }
         ],
         "internalType": "struct Scores.userScore[]",
@@ -367,7 +206,7 @@
       },
       {
         "internalType": "string",
-        "name": "_HO_TEN",
+        "name": "_HOTEN_SV",
         "type": "string"
       },
       {
@@ -396,14 +235,9 @@
         "type": "string"
       },
       {
-        "internalType": "uint256",
-        "name": "_MA_HK",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_MA_NH",
-        "type": "uint256"
+        "internalType": "string",
+        "name": "_LY_DO",
+        "type": "string"
       }
     ],
     "name": "setScoreGV",

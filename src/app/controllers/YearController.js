@@ -16,13 +16,10 @@ class YearController {
     }
 
     async create(req,res, next){
-        const date = new Date()
-        const dataMA_NH = await sequelize.query(`SELECT MA_NH FROM years ORDER BY MA_NH DESC LIMIT 1`, { type: QueryTypes.SELECT })
-        var thang = date.getMonth()+1
-        var nam = date.getYear()-100
-        if (thang >= 8 && nam !== dataMA_NH[0].MA_NH) {
             try {
-                var namhoc = date.getFullYear() +'-'+ (date.getFullYear()+1) 
+                const nam = req.body.MA_NH
+                const namhoc = req.body.NAM_HOC
+
                 await sequelize.query(`INSERT INTO years (MA_NH, NAM_HOC)
                                              VALUES ('${nam}', '${namhoc}')`, { type: QueryTypes.INSERT })
                 return res.json({
@@ -31,6 +28,43 @@ class YearController {
             } catch (error) {
                 console.log('Lỗi nhá:', error)
             }
+    }
+
+    async update(req,res, next){
+        try {
+            console.log(req.body)
+            const nam = req.params.MA_NH
+            const namhoc = req.body.NAM_HOC
+
+            await sequelize.query(`UPDATE years 
+                                    SET NAM_HOC = '${namhoc}'
+                                    WHERE MA_NH LIKE '%${nam}'`, { type: QueryTypes.UPDATE })
+            return res.json({
+                message: 'SUCCESS'
+            })            
+        } catch (error) {
+            return res.json({
+                message: 'FAIL',
+                err: error
+            }) 
+        }
+     
+    }
+
+    async delete(req,res, next){
+        try {
+            const nam = req.params.MA_NH
+
+            await sequelize.query(` DELETE FROM years WHERE MA_NH LIKE '%${nam}'`, { type: QueryTypes.DELETE })
+
+            return res.json({
+                message: 'SUCCESS'
+            })           
+        } catch (error) {
+            return res.json({
+                message: 'FAIL',
+                err: error
+            }) 
         }
     }
 }
