@@ -24,6 +24,9 @@ class TeacherController {
             })
         } catch (error) {
             console.log('Lỗi nhá:', error)
+            return res.json({
+                message: 'FAIL'
+            })
         }
     }
 
@@ -40,6 +43,9 @@ class TeacherController {
             })
         } catch (error) {
             console.log('Lỗi nhá:', error)
+            return res.json({
+                message: 'FAIL'
+            })
         }
     }
 
@@ -51,12 +57,15 @@ class TeacherController {
             const dataPDT = await sequelize.query(`SELECT * FROM teachers JOIN levels ON teachers.MA_CD = levels.MA_CD `+
                                                 `JOIN provinces ON teachers.MA_TINH = provinces.MA_TINH `+
                                                 `WHERE teachers.MA_CD LIKE '03'`, { type: QueryTypes.SELECT, })
-            return res.status(200).json({
+            return res.json({
                 dataPDT,
                 status: 400
             })
         } catch (error) {
             console.log('Lỗi nhá:', error)
+            return res.json({
+                message: 'FAIL'
+            })
         }
     }
 
@@ -69,16 +78,24 @@ class TeacherController {
         const gtGV = req.body.GIOITINH_GV
         const nsGV = req.body.NGAYSINH_GV
         const sdtGV = req.body.SODIENTHOAI_GV
+        const mailGV = req.body.EMAIL_GV
+        const tenCha = req.body.TENCHA_GV
+        const tuoiCha = req.body.TUOICHA_GV
+        const tenMe = req.body.TENME_GV
+        const tuoiMe = req.body.TUOIME_GV
         const mkGV = random(8)
 
         try {
-            await sequelize.query(`INSERT INTO teachers (MA_GV, MA_CD, MA_TINH, HOTEN_GV, GIOITINH_GV, NGAYSINH_GV, SODIENTHOAI_GV, MATKHAU_GV)
-                                    VALUES ('${maGV}', '${maCD}', '${maTinh}', '${tenGV}', '${gtGV}', '${nsGV}', '${sdtGV}', '${mkGV}')`, { type: QueryTypes.INSERT })
+            await sequelize.query(`INSERT INTO teachers (MA_GV, MA_CD, MA_TINH, HOTEN_GV, GIOITINH_GV, NGAYSINH_GV, SODIENTHOAI_GV, MATKHAU_GV, EMAIL_GV, TENCHA_GV, TUOICHA_GV, TENME_GV, TUOIME_GV)
+                                    VALUES ('${maGV}', '${maCD}', '${maTinh}', '${tenGV}', '${gtGV}', '${nsGV}', '${sdtGV}', '${mkGV}', '${mailGV}', '${tenCha}', '${tuoiCha}', '${tenMe}', '${tuoiMe}')`, { type: QueryTypes.INSERT })
             return res.json({
                 message: 'SUCCESS'
             })
         } catch (error) {
             console.log('Lỗi nhá:', error)
+            return res.json({
+                message: 'FAIL'
+            })
         }
     }
 
@@ -90,16 +107,24 @@ class TeacherController {
         const gtGV = req.body.GIOITINH_GV
         const nsGV = req.body.NGAYSINH_GV
         const sdtGV = req.body.SODIENTHOAI_GV
+        const mailGV = req.body.EMAIL_GV
+        const tenCha = req.body.TENCHA_GV
+        const tuoiCha = req.body.TUOICHA_GV
+        const tenMe = req.body.TENME_GV
+        const tuoiMe = req.body.TUOIME_GV
         const mkGV = random(8)
 
         try {
-            await sequelize.query(`INSERT INTO teachers (MA_GV, MA_CD, MA_TINH, HOTEN_GV, GIOITINH_GV, NGAYSINH_GV, SODIENTHOAI_GV, MATKHAU_GV)
-                                    VALUES ('${maGV}', '${maCD}', '${maTinh}', '${tenGV}', '${gtGV}', '${nsGV}', '${sdtGV}', '${mkGV}')`, { type: QueryTypes.INSERT })
+            await sequelize.query(`INSERT INTO teachers (MA_GV, MA_CD, MA_TINH, HOTEN_GV, GIOITINH_GV, NGAYSINH_GV, SODIENTHOAI_GV, MATKHAU_GV, EMAIL_GV, TENCHA_GV, TUOICHA_GV, TENME_GV, TUOIME_GV)
+                                    VALUES ('${maGV}', '${maCD}', '${maTinh}', '${tenGV}', '${gtGV}', '${nsGV}', '${sdtGV}', '${mkGV}', '${mailGV}', '${tenCha}', '${tuoiCha}', '${tenMe}', '${tuoiMe}')`, { type: QueryTypes.INSERT })
             return res.json({
                 message: 'SUCCESS'
             })
         } catch (error) {
             console.log('Lỗi nhá:', error)
+            return res.json({
+                message: 'FAIL'
+            })
         }
     }
 
@@ -113,16 +138,25 @@ class TeacherController {
             const gtGV = req.body.GIOITINH_GV
             const nsGV = req.body.NGAYSINH_GV
             const sdtGV = req.body.SODIENTHOAI_GV
+            const mailGV = req.body.EMAIL_GV
+            const tenCha = req.body.TENCHA_GV
+            const tuoiCha = req.body.TUOICHA_GV
+            const tenMe = req.body.TENME_GV
+            const tuoiMe = req.body.TUOIME_GV
 
             await sequelize.query(`UPDATE teachers 
                                     SET MA_CD = '${maCD}', MA_TINH = '${maTinh}', HOTEN_GV = '${tenGV}', GIOITINH_GV = '${gtGV}', 
-                                        NGAYSINH_GV = '${nsGV}', SODIENTHOAI_GV = '${sdtGV}' 
+                                        NGAYSINH_GV = '${nsGV}', SODIENTHOAI_GV = '${sdtGV}', EMAIL_GV = '${mailGV}',
+                                        TENCHA_GV = '${tenCha}', TUOICHA_GV = '${tuoiCha}', TENME_GV = '${tenMe}', TUOIME_GV = '${tuoiMe}'
                                     WHERE MA_GV LIKE '%${maGV}'`, { type: QueryTypes.UPDATE, })
             return res.json({
                 message: 'SUCCESS'
             })
         } catch (error) {
             console.log('Lỗi nhá:', error)
+            return res.json({
+                message: 'FAIL'
+            })
         }
     }
 
@@ -137,6 +171,9 @@ class TeacherController {
             })
         } catch (error) {
             console.log('Lỗi nhá:', error)
+            return res.json({
+                message: 'FAIL'
+            })
         }
     }
 

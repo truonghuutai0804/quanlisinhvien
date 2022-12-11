@@ -24,7 +24,9 @@ router.post('/api/score/:MA_SV', scoreController.create)
 
 router.post('/api/scoreImGV', scoreController.setDiemImport)
 
-router.get('/api/scoreSVPrintGV/:MA_GV', scoreController.getDSSVPrintGV)
+router.get('/api/scoreSVPrintGV/:MA_GV', scoreController.getSVPrintGV)
+
+router.get('/api/scoreDSSVPrintGV/:MA_GV', scoreController.getDSSVPrintGV)
 
 
 //ON CHAIN

@@ -105,17 +105,26 @@ class StudentController {
             const tenSV = req.body.HOTEN_SV
             const gtSV = req.body.GIOITINH_SV
             const nsSV = req.body.NGAYSINH_SV
+            const mailSV = req.body.EMAIL_SV
             const sdtSV = req.body.SODIENTHOAI_SV
+            const tenCha = req.body.TENCHA_SV
+            const tuoiCha = req.body.TUOICHA_SV
+            const tenMe = req.body.TENME_SV
+            const tuoiMe = req.body.TUOIME_SV
+            const trangthai = 0
             const mkSV = random(8)
 
-            await sequelize.query(`INSERT INTO students (MA_SV, MA_LOP, MA_TINH, HOTEN_SV, GIOITINH_SV, NGAYSINH_SV, SODIENTHOAI_SV, MATKHAU_SV )
-                                            VALUES ('${maSV}', '${maLop}', '${maTinh}', '${tenSV}', '${gtSV}', '${nsSV}', '${sdtSV}', '${mkSV}')`,
+            await sequelize.query(`INSERT INTO students (MA_SV, MA_LOP, MA_TINH, HOTEN_SV, GIOITINH_SV, NGAYSINH_SV, EMAIL_SV, SODIENTHOAI_SV, TRANGTHAI_SV ,MATKHAU_SV, TENCHA_SV, TUOICHA_SV, TENME_SV, TUOIME_SV )
+                                            VALUES ('${maSV}', '${maLop}', '${maTinh}', '${tenSV}', '${gtSV}', '${nsSV}', '${mailSV}' , '${sdtSV}', ${trangthai} , '${mkSV}', '${tenCha}', '${tuoiCha}', '${tenMe}', '${tuoiMe}')`,
                                                 { type: QueryTypes.INSERT })
             return res.json({
                 message: 'SUCCESS'
             })           
         } catch (error) {
             console.log('Lỗi nhá:', error)
+            return res.json({
+                message: 'FAIL'
+            })
         }
     }
 
@@ -127,18 +136,27 @@ class StudentController {
             const tenSV = req.body.HOTEN_SV
             const gtSV = req.body.GIOITINH_SV
             const nsSV = req.body.NGAYSINH_SV
+            const mailSV = req.body.EMAIL_SV
             const sdtSV = req.body.SODIENTHOAI_SV
+            const tenCha = req.body.TENCHA_SV
+            const tuoiCha = req.body.TUOICHA_SV
+            const tenMe = req.body.TENME_SV
+            const tuoiMe = req.body.TUOIME_SV
 
             await sequelize.query(`UPDATE students
-                                                SET MA_LOP = '${maLop}', MA_TINH = '${maTinh}', HOTEN_SV = '${tenSV}', GIOITINH_SV = '${gtSV}', 
-                                                    NGAYSINH_SV = '${nsSV}', SODIENTHOAI_SV = '${sdtSV}' 
-                                                WHERE MA_SV LIKE '%${maSV}'`,
-                                                { type: QueryTypes.UPDATE })
+                                    SET MA_LOP = '${maLop}', MA_TINH = '${maTinh}', HOTEN_SV = '${tenSV}', GIOITINH_SV = '${gtSV}', 
+                                        NGAYSINH_SV = '${nsSV}', SODIENTHOAI_SV = '${sdtSV}', EMAIL_SV = '${mailSV}', TENCHA_SV = '${tenCha}', 
+                                        TUOICHA_SV = '${tuoiCha}', TENME_SV = '${tenMe}', TUOIME_SV = '${tuoiMe}'
+                                    WHERE MA_SV LIKE '%${maSV}'`,
+                                    { type: QueryTypes.UPDATE })
             return res.json({
                 message: 'SUCCESS'
             })           
         } catch (error) {
             console.log('Lỗi nhá:', error)
+            return res.json({
+                message: 'FAIL'
+            })
         }
     }
 
@@ -154,6 +172,9 @@ class StudentController {
             })           
         } catch (error) {
             console.log('Lỗi nhá:', error)
+            return res.json({
+                message: 'FAIL'
+            })
         }
     }
 }

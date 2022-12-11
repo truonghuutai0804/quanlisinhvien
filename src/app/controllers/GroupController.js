@@ -75,8 +75,8 @@ class GroupController {
             const maHK = req.body.MA_HK
             const maNH = req.body.MA_NH
             const soLuong = req.body.SO_LUONG
-            await sequelize.query(`INSERT INTO groups (MA_NHP, MA_MH, MA_GV, MA_HK, MA_NH, SO_LUONG,SO_LUONG_CU, CON_LAI)
-                                         VALUES ('${maNHP}', '${maMH}', '${maGV}', '${maHK}', '${maNH}', '${soLuong}', '${soLuong}', '${soLuong}')`,
+            await sequelize.query(`INSERT INTO groups (MA_NHP, MA_MH, MA_GV, MA_HK, MA_NH, SO_LUONG, CON_LAI)
+                                         VALUES ('${maNHP}', '${maMH}', '${maGV}', '${maHK}', '${maNH}', '${soLuong}', '${soLuong}')`,
                                     { type: QueryTypes.INSERT })
             return res.json({
                 message: 'SUCCESS'

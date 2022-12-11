@@ -5,7 +5,7 @@ class SubjectController {
     // [GET] /api/subject
     async index(req,res){
         try {
-            const data = await sequelize.query(`SELECT * FROM subjects `, { type: QueryTypes.SELECT, })
+            const data = await sequelize.query(`SELECT * FROM subjects JOIN faculties ON subjects.MA_KHOA = faculties.MA_KHOA `, { type: QueryTypes.SELECT, })
             return res.json({
                 data: data,
                 status: 400
