@@ -93,7 +93,7 @@ class ScoreController {
                                                 FROM scores JOIN groups ON scores.MA_NHP = groups.MA_NHP 
                                                     JOIN subjects ON groups.MA_MH = subjects.MA_MH 
                                                     JOIN students ON scores.MA_SV = students.MA_SV 
-                                                WHERE   groups.MA_NHP LIKE '%${maNHP}' AND MA_GV LIKE '%${maGV}'`,
+                                                WHERE   groups.MA_NHP = '${maNHP}' AND MA_GV LIKE '%${maGV}'`,
                                                 { type: QueryTypes.SELECT })
         return res.json({
             dataDiem,
@@ -112,7 +112,7 @@ class ScoreController {
                                                     JOIN years ON groups.MA_NH = years.MA_NH
                                                     JOIN semesters ON groups.MA_HK = semesters.MA_HK
                                                     JOIN reasons ON scores.MA_LD = reasons.MA_LD 
-                                                WHERE  groups.MA_NHP LIKE '%${maNHP}' AND MA_GV LIKE '%${maGV}'`,
+                                                WHERE  groups.MA_NHP = '${maNHP}' AND MA_GV LIKE '%${maGV}'`,
                                                 { type: QueryTypes.SELECT })
         return res.json({
             dataDiem,
@@ -130,7 +130,7 @@ class ScoreController {
                                                     JOIN students ON scores.MA_SV = students.MA_SV
                                                     JOIN years ON groups.MA_NH = years.MA_NH
                                                     JOIN semesters ON groups.MA_HK = semesters.MA_HK
-                                                WHERE  groups.MA_NHP LIKE '%${maNHP}' AND MA_GV LIKE '%${maGV}'`,
+                                                WHERE  groups.MA_NHP = '${maNHP}' AND MA_GV LIKE '%${maGV}'`,
                                                 { type: QueryTypes.SELECT })
         return res.json({
             dataDiem,
@@ -146,7 +146,7 @@ class ScoreController {
                                                 FROM scores JOIN groups ON scores.MA_NHP = groups.MA_NHP 
                                                     JOIN subjects ON groups.MA_MH = subjects.MA_MH 
                                                     JOIN students ON scores.MA_SV = students.MA_SV 
-                                                WHERE   groups.MA_NHP LIKE '%${maNHP}' AND MA_GV LIKE '%${maGV}'`,
+                                                WHERE   groups.MA_NHP = '${maNHP}' AND MA_GV LIKE '%${maGV}'`,
                                                 { type: QueryTypes.SELECT })
         return res.json({
             dataDiem,
